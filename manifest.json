@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Report Facebook Tool By Nguyễn Tùng Anh",
+  "version": "2.1.0",
+  "description": "Tool tự động báo cáo Facebook chuyên nghiệp. Developer: Nguyễn Tùng Anh | Telegram: @Ngtunganhsupport1s | Zalo: 0389278236",
+  "permissions": [
+    "storage",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://www.facebook.com/*",
+    "https://facebook.com/*",
+    "https://*.facebook.com/*",
+    "http://hethongdvmxh.site/*",
+    "https://hethongdvmxh.site/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.facebook.com/*",
+        "https://facebook.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content.js"],
+      "matches": ["https://www.facebook.com/*", "https://facebook.com/*"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Tool Auto Report Facebook"
+  }
+}
+

@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 450px;
+            padding: 0;
+            margin: 0;
+            font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 25%, #0a1a1a 50%, #1a1a0a 75%, #0a0a1a 100%);
+            color: #ff00ff;
+            min-height: 600px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        @keyframes rgb-shift {
+            0% { filter: hue-rotate(0deg); }
+            25% { filter: hue-rotate(90deg); }
+            50% { filter: hue-rotate(180deg); }
+            75% { filter: hue-rotate(270deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+        
+        /* Cyber punk particles background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #ff0080, transparent),
+                radial-gradient(2px 2px at 40px 70px, #00ffff, transparent),
+                radial-gradient(1px 1px at 90px 40px, #ff8000, transparent),
+                radial-gradient(1px 1px at 130px 80px, #8000ff, transparent),
+                radial-gradient(2px 2px at 160px 30px, #ffff00, transparent),
+                radial-gradient(1px 1px at 200px 50px, #ff0040, transparent);
+            background-repeat: repeat;
+            background-size: 180px 90px;
+            /* Giảm hiệu ứng nền: tắt animation để bớt rối mắt */
+            /* animation: cyber-particles 15s linear infinite, color-cycle 8s ease-in-out infinite; */
+            pointer-events: none;
+            opacity: 0.15;
+        }
+        
+        @keyframes cyber-particles {
+            0% { transform: translateY(-100%) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+        
+        @keyframes color-cycle {
+            0% { filter: hue-rotate(0deg) saturate(1.5); }
+            33% { filter: hue-rotate(120deg) saturate(2); }
+            66% { filter: hue-rotate(240deg) saturate(1.8); }
+            100% { filter: hue-rotate(360deg) saturate(1.5); }
+        }
+        
+        /* Scanlines effect */
+        @keyframes scanlines {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 4px; }
+        }
+        
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        
+        @keyframes neon-glow {
+            0%, 100% { 
+                text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00, 0 0 20px #00ff00;
+            }
+            50% { 
+                text-shadow: 0 0 2px #00ff00, 0 0 5px #00ff00, 0 0 8px #00ff00, 0 0 12px #00ff00;
+            }
+        }
+        
+        .container {
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(8px);
+            border-radius: 0;
+            padding: 0;
+            color: #ff00ff;
+            box-shadow: 
+                0 0 30px rgba(255, 0, 255, 0.6),
+                0 0 60px rgba(0, 255, 255, 0.4),
+                0 0 90px rgba(255, 128, 0, 0.3),
+                inset 0 0 30px rgba(255, 0, 128, 0.1);
+            min-height: 100vh;
+            position: relative;
+            border: 3px solid;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff8000, #8000ff, #ffff00) 1;
+            /* Tắt flicker và border-glow để giao diện ổn định hơn */
+            /* animation: terminal-flicker 0.15s infinite linear alternate, border-glow 3s ease-in-out infinite; */
+        }
+        
+        @keyframes border-glow {
+            0%, 100% { 
+                border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff8000, #8000ff, #ffff00) 1;
+                filter: drop-shadow(0 0 10px #ff00ff);
+            }
+            25% { 
+                border-image: linear-gradient(45deg, #00ffff, #ff8000, #8000ff, #ffff00, #ff00ff) 1;
+                filter: drop-shadow(0 0 15px #00ffff);
+            }
+            50% { 
+                border-image: linear-gradient(45deg, #ff8000, #8000ff, #ffff00, #ff00ff, #00ffff) 1;
+                filter: drop-shadow(0 0 20px #ff8000);
+            }
+            75% { 
+                border-image: linear-gradient(45deg, #8000ff, #ffff00, #ff00ff, #00ffff, #ff8000) 1;
+                filter: drop-shadow(0 0 15px #8000ff);
+            }
+        }
+        
+        @keyframes terminal-flicker {
+            0% { opacity: 1; }
+            98% { opacity: 1; }
+            99% { opacity: 0.98; }
+            100% { opacity: 1; }
+        }
+        
+        .header-section {
+            background: #111827; /* nền tối đơn giản hơn */
+            padding: 20px 24px;
+            color: #e5e7eb;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+            border-bottom: 1px solid rgba(156,163,175,0.4);
+        }
+        
+        .header-section::after {
+            content: '> INITIALIZING HACK PROTOCOL...';
+            position: absolute;
+            bottom: 5px;
+            left: 30px;
+            font-size: 10px;
+            color: rgba(0, 255, 0, 0.7);
+            font-family: 'Courier New', monospace;
+            animation: typing 3s steps(30) infinite;
+        }
+        
+        @keyframes typing {
+            0%, 50% { width: 0; }
+            100% { width: 100%; }
+        }
+        
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(180deg); }
+        }
+        
+        .content-section {
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.9);
+            position: relative;
+            border-top: 1px solid rgba(0, 255, 0, 0.3);
+        }
+        
+        .content-section::before {
+            content: '> LOADING INTERFACE...';
+            position: absolute;
+            top: 10px;
+            right: 30px;
+            font-size: 10px;
+            color: rgba(0, 255, 0, 0.5);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .header-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            color: #f9fafb;
+            text-shadow: none;
+            position: relative;
+            z-index: 1;
+            font-family: 'Courier New', monospace;
+            /* Không animation cho tiêu đề */
+            letter-spacing: 1px;
+        }
+        
+        @keyframes rainbow-glow {
+            0% { 
+                color: #ff00ff;
+                text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+            }
+            20% { 
+                color: #00ffff;
+                text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+            }
+            40% { 
+                color: #ff8000;
+                text-shadow: 0 0 10px #ff8000, 0 0 20px #ff8000, 0 0 30px #ff8000;
+            }
+            60% { 
+                color: #8000ff;
+                text-shadow: 0 0 10px #8000ff, 0 0 20px #8000ff, 0 0 30px #8000ff;
+            }
+            80% { 
+                color: #ffff00;
+                text-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00, 0 0 30px #ffff00;
+            }
+            100% { 
+                color: #ff00ff;
+                text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+            }
+        }
+        
+        .header-title::before {
+            content: '[TOOL] ';
+            color: rgba(255, 255, 0, 0.8);
+            font-size: 14px;
+        }
+        
+        .header-title::after {
+            content: ' [PRO MAX]';
+            color: rgba(255, 128, 0, 0.9);
+            font-size: 14px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .header-subtitle {
+            color: #9ca3af;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+            font-family: 'Courier New', monospace;
+            text-transform: none;
+            letter-spacing: 0.5px;
+            /* Không animation đổi màu */
+        }
+        
+        @keyframes color-shift {
+            0%, 100% { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
+            25% { color: #ff8000; text-shadow: 0 0 10px #ff8000; }
+            50% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; }
+            75% { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
+        }
+        
+        .header-subtitle::before {
+            content: '>> ';
+            color: rgba(255, 128, 0, 0.8);
+        }
+        
+        .header-developer {
+            color: rgba(0, 255, 0, 0.7);
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .header-developer::before {
+            content: '[DEV] ';
+            color: rgba(0, 255, 0, 0.5);
+        }
+        
+        .version-badge {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            color: #00ff00;
+            padding: 8px 16px;
+            border-radius: 0;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 0 auto;
+            display: inline-block;
+            border: 2px solid #00ff00;
+            position: relative;
+            z-index: 1;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            /* animation: terminal-flicker 0.15s infinite linear alternate; */
+        }
+        
+        .version-badge::before {
+            content: '[VER] ';
+            color: rgba(0, 255, 0, 0.6);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 12px;
+            color: #ff00ff;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+            font-family: 'Courier New', monospace;
+            position: relative;
+            /* animation: label-glow 2s ease-in-out infinite alternate; */
+        }
+        
+        @keyframes label-glow {
+            0% { 
+                color: #ff00ff; 
+                text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; 
+            }
+            50% { 
+                color: #00ffff; 
+                text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; 
+            }
+            100% { 
+                color: #ff8000; 
+                text-shadow: 0 0 10px #ff8000, 0 0 20px #ff8000; 
+            }
+        }
+        
+        label::before {
+            content: '[INPUT] ';
+            color: rgba(255, 255, 0, 0.8);
+            font-size: 12px;
+        }
+        
+        label::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff, #ff8000, transparent);
+            animation: line-scan 3s ease-in-out infinite;
+        }
+        
+        @keyframes line-scan {
+            0% { transform: scaleX(0); }
+            50% { transform: scaleX(1); }
+            100% { transform: scaleX(0); }
+        }
+        
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #4b5563;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #111827;
+            color: #e5e7eb;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            font-weight: 500;
+            font-family: 'Courier New', monospace;
+            box-shadow: none;
+            text-shadow: none;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+        
+        @keyframes input-pulse {
+            0%, 100% { 
+                border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff8000, #8000ff) 1;
+                color: #ff00ff;
+            }
+            25% { 
+                border-image: linear-gradient(45deg, #00ffff, #ff8000, #8000ff, #ff00ff) 1;
+                color: #00ffff;
+            }
+            50% { 
+                border-image: linear-gradient(45deg, #ff8000, #8000ff, #ff00ff, #00ffff) 1;
+                color: #ff8000;
+            }
+            75% { 
+                border-image: linear-gradient(45deg, #8000ff, #ff00ff, #00ffff, #ff8000) 1;
+                color: #8000ff;
+            }
+        }
+        
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16,185,129,0.35);
+            background: #020617;
+        }
+        
+        select:hover, input[type="number"]:hover {
+            border-color: #9ca3af;
+            box-shadow: 0 0 0 1px rgba(156,163,175,0.6);
+            background: #020617;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px 14px;
+            background: #0ea5e9;
+            color: #f9fafb;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 10px rgba(14,165,233,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background: #0284c7;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(14,165,233,0.45);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 6px rgba(15,23,42,0.8);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(116, 185, 255, 0.3);
+        }
+        
+        .success-box {
+            background: linear-gradient(145deg, rgba(233, 69, 96, 0.15), rgba(83, 52, 131, 0.1));
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(233, 69, 96, 0.3);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.3), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .success-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #e94560, #533483, #0f3460, #e94560);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding: 25px;
+            border-top: 2px solid rgba(233, 69, 96, 0.3);
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            background: linear-gradient(145deg, rgba(15, 15, 35, 0.8), rgba(26, 26, 46, 0.6));
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.2), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 69, 96, 0.2);
+        }
+        
+        .footer .qrg {
+            color: #e94560;
+            font-weight: 800;
+            text-decoration: none;
+            font-size: 16px;
+            text-shadow: 0 2px 4px rgba(233, 69, 96, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .footer .qrg:hover {
+            text-decoration: none;
+            color: #ff6b35;
+            text-shadow: 0 0 10px rgba(233, 69, 96, 0.6);
+            transform: scale(1.05);
+        }
+        
+        .contact-info {
+            margin: 12px 0;
+            padding: 15px 20px;
+            background: linear-gradient(145deg, rgba(233, 69, 96, 0.1), rgba(83, 52, 131, 0.05));
+            border: 1px solid rgba(233, 69, 96, 0.2);
+            border-radius: 15px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-info:hover {
+            background: linear-gradient(145deg, rgba(233, 69, 96, 0.15), rgba(83, 52, 131, 0.08));
+            border-color: rgba(233, 69, 96, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.2);
+        }
+        
+        .contact-info strong {
+            color: #e94560;
+            font-size: 15px;
+            text-shadow: 0 1px 2px rgba(233, 69, 96, 0.3);
+        }
+        
+        .feature-list {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .feature-list h3 {
+            color: #ff6b6b;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .feature-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 5px 0;
+            color: #555;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .feature-list li:before {
+            content: "🔥 ";
+            margin-right: 5px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+        
+        .social-btn {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            margin-top: 0;
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .telegram-btn {
+            background: linear-gradient(135deg, #0088cc, #229ED9);
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 136, 204, 0.4);
+            border-color: rgba(0, 136, 204, 0.3);
+        }
+        
+        .telegram-btn:hover {
+            transform: translateY(-3px) perspective(1000px) rotateX(-5deg);
+            box-shadow: 0 15px 40px rgba(0, 136, 204, 0.6);
+            border-color: rgba(0, 136, 204, 0.8);
+        }
+        
+        .discord-btn {
+            background: linear-gradient(135deg, #5865F2, #7289DA);
+            color: white;
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
+            border-color: rgba(88, 101, 242, 0.3);
+        }
+        
+        .discord-btn:hover {
+            transform: translateY(-3px) perspective(1000px) rotateX(-5deg);
+            box-shadow: 0 15px 40px rgba(88, 101, 242, 0.6);
+            border-color: rgba(88, 101, 242, 0.8);
+        }
+        
+        .key-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .key-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .report-panel {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(0, 184, 148, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .report-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 10s ease-in-out infinite reverse;
+        }
+        
+        .panel-title {
+            font-size: 24px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .panel-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        #changeKeyBtn:hover {
+            background: rgba(255,255,255,0.3) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,255,255,0.2);
+        }
+        
+        .key-section h3 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .key-input-group {
+            margin-bottom: 15px;
+        }
+        
+        .key-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            font-size: 15px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .key-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .key-input:focus {
+            outline: none;
+            border-color: rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.1);
+        }
+        
+        .key-instruction {
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+            backdrop-filter: blur(10px);
+        }
+        
+        .key-instruction strong {
+            color: #fff;
+            font-weight: 700;
+        }
+        
+        .verify-btn {
+            width: 100%;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 184, 148, 0.3);
+        }
+        
+        .verify-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 184, 148, 0.4);
+        }
+        
+        .key-status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+        
+        .key-valid {
+            background: rgba(0, 184, 148, 0.2);
+            color: #00b894;
+            border: 2px solid rgba(0, 184, 148, 0.3);
+        }
+        
+        .key-invalid {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        /* Enhanced Panel Styles */
+        .dame-panel {
+            background: linear-gradient(145deg, rgba(233, 69, 96, 0.15), rgba(83, 52, 131, 0.1));
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(233, 69, 96, 0.3);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 20px 60px rgba(233, 69, 96, 0.3), 
+                        0 10px 30px rgba(83, 52, 131, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            /* Giảm độ "3D" để bớt rối mắt */
+            transform: none;
+        }
+        
+        .dame-panel:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 30px 80px rgba(233, 69, 96, 0.4), 
+                        0 15px 40px rgba(83, 52, 131, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(233, 69, 96, 0.5);
+        }
+        
+        .dame-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #e94560, #533483, #0f3460, #e94560);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease-in-out infinite;
+            border-radius: 25px 25px 0 0;
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.6);
+        }
+        
+        .post-panel::before {
+            background: linear-gradient(90deg, #ff6b35, #f7931e, #e94560, #ff6b35);
+            background-size: 200% 100%;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.6);
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes rainbowBorder {
+            0% { border-image: linear-gradient(45deg, #e94560, #ff6b35, #f7931e, #533483, #0f3460) 1; }
+            20% { border-image: linear-gradient(45deg, #ff6b35, #f7931e, #533483, #0f3460, #e94560) 1; }
+            40% { border-image: linear-gradient(45deg, #f7931e, #533483, #0f3460, #e94560, #ff6b35) 1; }
+            60% { border-image: linear-gradient(45deg, #533483, #0f3460, #e94560, #ff6b35, #f7931e) 1; }
+            80% { border-image: linear-gradient(45deg, #0f3460, #e94560, #ff6b35, #f7931e, #533483) 1; }
+            100% { border-image: linear-gradient(45deg, #e94560, #ff6b35, #f7931e, #533483, #0f3460) 1; }
+        }
+        
+        select:focus, input[type="number"]:focus {
+            animation: rainbowBorder 3s ease-in-out infinite;
+        }
+        
+        .panel-header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .panel-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        
+        .post-icon {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .panel-title-main {
+            color: white;
+            font-size: 22px;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .panel-subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .info-card {
+            background: linear-gradient(145deg, rgba(255, 107, 53, 0.15), rgba(247, 147, 30, 0.1));
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.3);
+        }
+        
+        .info-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .info-text {
+            color: rgba(255,255,255,0.9);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .form-group-enhanced {
+            margin-bottom: 20px;
+        }
+        
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(145deg, rgba(233, 69, 96, 0.1), rgba(83, 52, 131, 0.05));
+            border: 2px solid rgba(233, 69, 96, 0.2);
+            border-radius: 18px;
+            padding: 20px 22px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.15), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .input-wrapper:hover {
+            border-color: rgba(233, 69, 96, 0.4);
+            background: linear-gradient(145deg, rgba(233, 69, 96, 0.15), rgba(83, 52, 131, 0.08));
+            box-shadow: 0 12px 35px rgba(233, 69, 96, 0.2);
+        }
+        
+        .input-wrapper:focus-within {
+            border-color: rgba(233, 69, 96, 0.6);
+            background: linear-gradient(145deg, rgba(233, 69, 96, 0.2), rgba(83, 52, 131, 0.1));
+            box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.2), 0 15px 40px rgba(233, 69, 96, 0.25);
+        }
+        
+        .input-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            opacity: 0.8;
+        }
+        
+        .input-content {
+            flex: 1;
+        }
+        
+        .enhanced-label {
+            display: block;
+            color: rgba(255,255,255,0.9);
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .enhanced-input, .enhanced-select {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            outline: none;
+            padding: 0;
+        }
+        
+        .enhanced-input::placeholder {
+            color: rgba(255,255,255,0.6);
+            font-style: italic;
+        }
+        
+        .enhanced-text-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            padding: 0;
+        }
+        
+        .enhanced-text-input::placeholder {
+            color: rgba(255,255,255,0.6);
+            font-style: italic;
+        }
+        
+        input[type="number"]::placeholder {
+            color: rgba(255,255,255,0.6);
+            font-style: italic;
+        }
+        
+        .fake-config-section {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        
+        .fake-config-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(248,250,252,0.95);
+            margin-bottom: 6px;
+        }
+        
+        .fake-config-description {
+            font-size: 11px;
+            color: rgba(226,232,240,0.85);
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        /* Force override dropdown options */
+        select option,
+        #dameMode option,
+        #reportType option {
+            background: #0f0f23 !important;
+            background-image: linear-gradient(145deg, 
+                        rgba(233, 69, 96, 0.3) 0%, 
+                        rgba(15, 15, 35, 0.9) 30%, 
+                        rgba(83, 52, 131, 0.2) 70%, 
+                        rgba(255, 107, 53, 0.1) 100%) !important;
+            color: #ffffff !important;
+            padding: 15px 20px !important;
+            border: none !important;
+            font-weight: 700 !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+            font-size: 14px !important;
+        }
+        
+        select option:hover, 
+        select option:checked,
+        select option:focus,
+        select option:active,
+        #dameMode option:hover,
+        #dameMode option:checked,
+        #reportType option:hover,
+        #reportType option:checked {
+            background: #e94560 !important;
+            background-image: linear-gradient(145deg, 
+                        rgba(233, 69, 96, 0.9) 0%, 
+                        rgba(255, 107, 53, 0.7) 50%, 
+                        rgba(247, 147, 30, 0.5) 100%) !important;
+            color: #ffffff !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9) !important;
+        }
+        
+        /* Force dropdown container styling */
+        select::-webkit-scrollbar {
+            width: 8px !important;
+        }
+        
+        select::-webkit-scrollbar-track {
+            background: rgba(15, 15, 35, 0.8) !important;
+        }
+        
+        select::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #e94560, #ff6b35) !important;
+            border-radius: 4px !important;
+        }
+        
+        /* Override browser default dropdown styling */
+        select {
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+        }
+        
+        /* Add custom dropdown arrow */
+        select {
+            background-image: linear-gradient(45deg, transparent 50%, #ffffff 50%), 
+                              linear-gradient(135deg, #ffffff 50%, transparent 50%) !important;
+            background-position: calc(100% - 20px) calc(1em + 2px), 
+                                calc(100% - 15px) calc(1em + 2px) !important;
+            background-size: 5px 5px, 5px 5px !important;
+            background-repeat: no-repeat !important;
+        }
+        
+        /* Force all select elements to use dark theme */
+        select, 
+        select * {
+            background-color: rgba(15, 15, 35, 0.9) !important;
+            color: #ffffff !important;
+        }
+        
+        .action-section {
+            margin-top: 25px;
+        }
+        
+        .enhanced-btn {
+            width: 100%;
+            background: none;
+            border: none;
+            border-radius: 16px;
+            padding: 18px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .primary-btn {
+            background: linear-gradient(135deg, #e94560 0%, #533483 50%, #0f3460 100%);
+            color: white;
+            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.5), 
+                        0 5px 15px rgba(83, 52, 131, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        
+        .danger-btn {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #e94560 100%);
+            color: white;
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.5), 
+                        0 5px 15px rgba(247, 147, 30, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+        
+        .enhanced-btn:hover {
+            transform: translateY(-3px) perspective(1000px) rotateX(-5deg);
+        }
+        
+        .primary-btn:hover {
+            box-shadow: 0 20px 60px rgba(233, 69, 96, 0.6), 
+                        0 10px 25px rgba(83, 52, 131, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        .danger-btn:hover {
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.6), 
+                        0 10px 25px rgba(247, 147, 30, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        .enhanced-btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-icon {
+            font-size: 18px;
+        }
+        
+        .btn-text {
+            flex: 1;
+        }
+        
+        .btn-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .enhanced-btn:hover .btn-glow {
+            left: 100%;
+        }
+        
+        .enhanced-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .enhanced-btn:disabled:hover {
+            transform: none;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        /* Panel Animation (keyframes retained in case needed later) */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .panel-fade-out {
+            animation: fadeOut 0.3s ease-out forwards;
+        }
+        
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-section">
+            <div class="header">
+                <div style="text-align: center; margin-bottom: 16px; font-family: 'Courier New', monospace;">
+                    <div style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin-bottom: 4px; text-shadow: none; letter-spacing: 0.5px;">
+                        📱 TELEGRAM: @Ngtunganhsupport1s
+                    </div>
+                    <div style="color: #9ca3af; font-size: 14px; font-weight: 600; text-shadow: none; letter-spacing: 0.5px;">
+                        📞 ZALO: 0389278236
+                    </div>
+                </div>
+                <h1 class="header-title">🔥 Tool Auto Report Facebook Pro Max</h1>
+                <div style="color: #d1d5db; font-size: 13px; font-weight: 500; margin-bottom: 12px; font-family: 'Courier New', monospace; text-shadow: none; letter-spacing: 0.5px;">
+                    👨‍💻 Developer: Hacker Nguyễn Tùng Anh
+                </div>
+                <div class="version-badge">✨ Version 2.0 Professional ✨</div>
+            </div>
+        </div>
+
+        <!-- Social links - moved to top for easy access -->
+        <div class="content-section" style="padding-bottom: 10px; padding-top: 15px;">
+            <div class="social-links">
+                <a href="https://t.me/meohaymmo" target="_blank" class="social-btn telegram-btn">
+                    📱 Telegram Group
+                </a>
+                <a href="https://discord.com/invite/JPWK5uHn" target="_blank" class="social-btn discord-btn">
+                    🎮 Discord Server
+                </a>
+                <a href="https://tuongtacngon.pro" target="_blank" class="social-btn" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: #ecfdf5;">
+                    🔑 Key HMA chỉ 5k
+                </a>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <!-- Panel Key - Hiện khi chưa có key -->
+            <div id="keyPanel" class="key-section">
+                <div class="panel-content">
+                    <h3 class="panel-title">🔐 Xác thực License Key</h3>
+                    
+                    <div class="key-input-group">
+                        <input type="text" id="licenseKey" class="key-input" placeholder="Nhập License Key của bạn...">
+                    </div>
+                    <button id="verifyBtn" class="verify-btn">🔍 Xác thực Key</button>
+                    <div id="keyStatus" class="key-status"></div>
+                    
+                    <div class="key-instruction">
+                        <strong>📋 Cách lấy License Key:</strong><br>
+                        1. Join Telegram và Discord phía trên cùng<br>
+                        2. Nhắn tin Admin để lấy key miễn phí<br>
+                        3. Nhập key vào ô trên và xác thực
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Panel Report - Hiện sau khi xác thực key thành công -->
+            <div id="reportPanel" class="report-panel" style="display: none;">
+                <div class="panel-content">
+                    <h3 class="panel-title">🔥 Tool Auto Report Facebook Pro Max</h3>
+                    
+                    <!-- Thông tin key chi tiết - Hiển thị luôn -->
+                    <div id="keyInfoDisplay" class="key-info-display" style="background: #0f172a; border: 1px solid rgba(34,197,94,0.7); border-radius: 12px; padding: 18px; margin: 15px 0; backdrop-filter: blur(8px); color: #e5e7eb; font-size: 15px; line-height: 1.7; box-shadow: 0 6px 16px rgba(15,23,42,0.7); transition: all 0.3s ease; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #00b894, #00a085, #74b9ff); opacity: 0.9;"></div>
+                        <div style="font-weight: bold; margin-bottom: 15px; color: #00ff88; display: flex; align-items: center; gap: 10px; font-size: 16px;">
+                            <span style="font-size: 18px;">🔑</span>
+                            <span>Thông tin License Key</span>
+                            <div style="flex: 1; height: 2px; background: linear-gradient(90deg, transparent, rgba(0,255,136,0.5), transparent);"></div>
+                        </div>
+                        <div id="keyInfoContent">
+                            <div style="text-align: center; color: #ffffff; font-style: italic; font-size: 14px;">
+                                Đang tải thông tin key...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="success-box" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px);">
+                        ✅ <strong>Tool đã được kích hoạt!</strong><br>
+                        Hệ thống báo cáo Facebook tự động thông minh
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dameMode" style="color: white;">🎯 Chế độ Dame:</label>
+                        <select id="dameMode">
+                            <option value="1">🏢 Dame Not</option>
+                            <option value="2">👤 Dame Profile x Chuyên Nghiệp</option>
+                            <option value="post">📋 Dame Post</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Panel cho Dame Profile/Page -->
+                    <div id="normalDamePanel" class="dame-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">🎯</div>
+                            <h3 class="panel-title-main">Auto Dame System</h3>
+                            <p class="panel-subtitle">Hệ thống báo cáo tự động chuyên nghiệp</p>
+                        </div>
+                        
+                        <div class="panel-content">
+                            <div class="form-group-enhanced">
+                                <div class="input-wrapper">
+                                    <div class="input-icon">🔄</div>
+                                    <div class="input-content">
+                                        <label for="totalRounds" class="enhanced-label">Số vòng Dame</label>
+                                        <input type="number" id="totalRounds" min="1" max="999999999" value="1" placeholder="Nhập số vòng (1-999999999)" class="enhanced-input">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="fakeConfigSection" class="fake-config-section">
+                                <div class="fake-config-title">Cấu hình Fake Profile nâng cao</div>
+                                <div class="fake-config-description">
+                                    Dùng riêng cho <strong>Dame Profile</strong> và <strong>Dame Chuyên Nghiệp</strong>. Tool sẽ dùng 2 link bên dưới để chạy flow FAKE PROFILE (celebrity & business) trước khi dame random.
+                                </div>
+                                    <!-- ĐÃ ẨN input dán link celeb theo yêu cầu user -->
+                                    <!-- ĐÃ ẨN input dán link business theo yêu cầu user -->
+                            </div>
+                        </div>
+
+                        <!-- Hướng dẫn nhanh cho chế độ Dame Not -->
+                        <div style="margin-top: 10px; font-size: 12px; color: #e5e7eb; background: #0b1120; border-radius: 8px; padding: 10px 12px; border: 1px solid #1f2937; line-height: 1.5;">
+                            <strong>Cách dùng Dame Not:</strong><br>
+                            1️⃣ Trên Facebook, chỉ cần mở đúng <strong>profile cần báo cáo</strong>, không cần tự ấn 3 chấm hay Report.<br>
+                            2️⃣ Chọn chế độ <strong>Dame Not</strong>, nhập số vòng cần chạy rồi bấm <strong>"Bắt đầu Dame ngay"</strong>.<br>
+                            3️⃣ Tool sẽ tự động ấn <strong>3 chấm → Report profile → Something about this profile</strong> rồi chạy lần lượt các lý do báo cáo trong menu.<br>
+                            ⚠️ Khi tool đang chạy, hạn chế click lung tung hoặc đổi tab để tránh làm gián đoạn flow.
+                        </div>
+                        
+                        <div class="action-section">
+                            <button id="runBtn" class="enhanced-btn primary-btn">
+                                <span class="btn-icon">🚀</span>
+                                <span class="btn-text">Bắt đầu Dame ngay!</span>
+                                <div class="btn-glow"></div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Panel cho Dame Post -->
+                    <div id="damePostPanel" class="dame-panel post-panel" style="display: none;">
+                        <div class="panel-header post-header">
+                            <div class="panel-icon post-icon">📋</div>
+                            <h3 class="panel-title-main">Dame Post System</h3>
+                            <p class="panel-subtitle">Báo cáo bài viết tự động thông minh</p>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="info-icon">💡</div>
+                            <div class="info-text">
+                                <strong>Chế độ đặc biệt:</strong> Tự động quét và báo cáo tất cả bài viết có nút Actions
+                            </div>
+                        </div>
+                        
+                        <div class="form-group-enhanced">
+                            <div class="input-wrapper">
+                                <div class="input-icon">🎯</div>
+                                <div class="input-content">
+                                    <label for="reportType" class="enhanced-label">Loại báo cáo</label>
+                                    <select id="reportType" class="enhanced-select">
+                                        <option value="bullying">😡 Quấy rối</option>
+                                        <option value="scam">💰 Scam</option>
+                                        <option value="spam">📧 Spam</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-section">
+                            <button id="reportPostBtn" class="enhanced-btn danger-btn">
+                                <span class="btn-icon">🚨</span>
+                                <span class="btn-text">Bắt đầu Dame Post!</span>
+                                <div class="btn-glow"></div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button id="changeKeyBtn" style="background: rgba(255,255,255,0.2); padding: 10px 20px; border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; color: white; font-size: 13px; cursor: pointer; backdrop-filter: blur(10px); transition: all 0.3s ease;">
+                            🔑 Đổi License Key
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="footer">
+            <div style="margin-bottom: 15px;">
+                👨‍💻 <strong>Developer:</strong> <a href="#" class="qrg">Hacker Nguyễn Tùng Anh</a>
+            </div>
+            
+            
+            
+            <div style="margin-top: 15px; font-size: 13px; color: #666;">
+Tool Auto Report Facebook Pro Max | Version 2.0 Professional
+            </div>
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
